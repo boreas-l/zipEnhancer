@@ -1,0 +1,33 @@
+{
+    "framework": "pytorch",
+    "task": "acoustic-noise-suppression",
+    "pipeline": {
+       "type": "speech_zipenhancer_ans_multiloss_16k_base"
+    },
+    "model": {
+      "type": "speech_zipenhancer_ans_multiloss_16k_base",
+      "dense_channel": 64,
+      "num_tsconformers": 4,
+      "former_name": "Zipformer2DualPathEncoder",
+      "former_conf": {
+          "num_encoder_layers": [1, 1, 1, 1],
+          "downsampling_factor": [1, 2, 2, 1],
+          "f_downsampling_factor": [1, 2, 2, 1],
+          "encoder_dim": [64, 64, 64, 64],
+          "pos_dim": 24,
+          "num_heads": 4,
+          "query_head_dim": 12,
+          "pos_head_dim": 4,
+          "value_head_dim": 8,
+          "feedforward_dim": [256, 256, 256, 256],
+          "cnn_module_kernel": 15,
+          "causal": false,
+          "encoder_unmasked_dim": 64,
+          "warmup_batches": 4000.0
+      },
+          "batch_first": true,
+      "model_num_spks": 1
+    },
+    "preprocessor": {}
+}
+  
