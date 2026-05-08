@@ -988,29 +988,15 @@ class ActivationDropoutAndLinear(torch.nn.Module):
         self.dropout_shared_dim = dropout_shared_dim
 
     def forward(self, x: Tensor):
-        # if torch.jit.is_scripting() or torch.jit.is_tracing():
-        if torch.jit.is_scripting() or torch.jit.is_tracing() or (
-                not self.training):
-            if self.activation == 'SwooshL':
-                x = SwooshLForward(x)
-                # x = k2.swoosh_l_forward(x)
-            elif self.activation == 'SwooshR':
-                x = SwooshRForward(x)
-                # x = k2.swoosh_r_forward(x)
-            else:
-                assert False, self.activation
-            return torch.nn.functional.linear(x, self.weight, self.bias)
-
-        # print(f"dropout_p:{float(self.dropout_p)}")
-        # print(f"dropout_shared_dim:{self.dropout_shared_dim}")
-        # return ActivationDropoutAndLinearFunction.apply(
-        #     x,
-        #     self.weight,
-        #     self.bias,
-        #     self.activation,
-        #     float(self.dropout_p),
-        #     self.dropout_shared_dim,
-        # )
+        if self.activation == 'SwooshL':
+            x = SwooshLForward(x)
+        elif self.activation == 'SwooshR':
+            x = SwooshRForward(x)
+        else:
+            assert False, self.activation
+        if self.training:
+            x = torch.nn.functional.dropout(x, p=float(self.dropout_p), training=True)
+        return torch.nn.functional.linear(x, self.weight, self.bias)
 
 
 def convert_num_channels(x: Tensor, num_channels: int) -> Tensor:
