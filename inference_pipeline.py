@@ -93,8 +93,8 @@ class ANSZipEnhancer:
                         end='')
                     tmp_input = dict(noisy=ndarray[:, current_idx:current_idx
                                                    + window])
-                    tmp_output = self.model(
-                        tmp_input, )['wav_l2'][0].cpu().numpy()
+                    tmp_output = self.zipenhancer_obj.forward(
+                        tmp_input)['wav_l2'][0].cpu().numpy()
                     end_index = current_idx + window - give_up_length
                     if current_idx == 0:
                         outputs[current_idx:
